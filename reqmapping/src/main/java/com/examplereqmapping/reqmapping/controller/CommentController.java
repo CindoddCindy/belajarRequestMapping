@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -28,7 +29,7 @@ public class CommentController {
     }
 
     @PostMapping("/posts/{postId}/comments")
-    public Comment createComment(@PathVariable (value = "postId") Long postId,
+    public Comment createComment(@PathVariable (value = "postId") Long postId,@RequestParam("file") MultipartFile file, String text,
                                  @Valid @RequestBody Comment comment) {
         return postRepository.findById(postId).map(post -> {
             comment.setPost(post);

@@ -15,8 +15,21 @@ public class Comment extends AuditModel{
     private Long id;
 
     @NotNull
-    @Lob
     private String text;
+
+    private String name;
+
+    private String type;
+
+    @Lob
+    private byte[] data;
+
+    public Comment(@NotNull String text, String name, String type, byte[] data) {
+        this.text = text;
+        this.name = name;
+        this.type = type;
+        this.data = data;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_id", nullable = false)
@@ -24,12 +37,10 @@ public class Comment extends AuditModel{
     @JsonIgnore
     private Post post;
 
-    public Comment(@NotNull String text) {
-        this.text = text;
-    }
 
     public Comment() {
     }
+
 
     public Long getId() {
         return id;
@@ -45,6 +56,30 @@ public class Comment extends AuditModel{
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
     public Post getPost() {
