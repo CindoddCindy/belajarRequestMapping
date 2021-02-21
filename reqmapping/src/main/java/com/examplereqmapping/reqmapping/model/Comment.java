@@ -31,6 +31,7 @@ public class Comment extends AuditModel{
         this.data = data;
     }
 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

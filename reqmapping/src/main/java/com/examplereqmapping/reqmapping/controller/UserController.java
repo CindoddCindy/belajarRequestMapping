@@ -1,8 +1,7 @@
 package com.examplereqmapping.reqmapping.controller;
 
-import com.examplereqmapping.reqmapping.exception.ResourceNotFoundException;
-import com.examplereqmapping.reqmapping.model.Post;
-import com.examplereqmapping.reqmapping.repository.PostRepository;
+import com.examplereqmapping.reqmapping.model.User;
+import com.examplereqmapping.reqmapping.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,24 +10,21 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-
 @RestController
-@RequestMapping("/posts")
-public class PostController {
+public class UserController {
     @Autowired
-    private PostRepository postRepository;
+    private UserRepository userRepository;
 
-    @GetMapping("/posts")
-    public Page<Post> getAllPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
+    @GetMapping("/users")
+    public Page<User> getAllUser(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
-    //@PostMapping("/posts")
-    @RequestMapping(value = "/{id}",method = RequestMethod.POST)
-    public Post createPost(@Valid @RequestBody Post post) {
-        return postRepository.save(post);
+    @PostMapping("/users")
+    public User createUser(@Valid @RequestBody User user) {
+        return userRepository.save(user);
     }
-
+/*
     @PutMapping("/posts/{postId}")
     public Post updatePost(@PathVariable Long postId, @Valid @RequestBody Post postRequest) {
         return postRepository.findById(postId).map(post -> {
@@ -47,4 +43,8 @@ public class PostController {
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new ResourceNotFoundException("PostId " + postId + " not found"));
     }
+
+
+ */
+
 }

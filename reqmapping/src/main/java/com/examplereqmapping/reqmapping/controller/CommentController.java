@@ -4,6 +4,7 @@ import com.examplereqmapping.reqmapping.exception.ResourceNotFoundException;
 import com.examplereqmapping.reqmapping.model.Comment;
 import com.examplereqmapping.reqmapping.repository.CommentRepository;
 import com.examplereqmapping.reqmapping.repository.PostRepository;
+import com.examplereqmapping.reqmapping.services.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 public class CommentController {
@@ -22,6 +24,9 @@ public class CommentController {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     @GetMapping("/posts/{postId}/comments")
     public Page<Comment> getAllCommentsByPostId(@PathVariable (value = "postId") Long postId,
                                                 Pageable pageable) {
@@ -29,11 +34,20 @@ public class CommentController {
     }
 
     @PostMapping("/posts/{postId}/comments")
-    public Comment createComment(@PathVariable (value = "postId") Long postId,@RequestParam("file") MultipartFile file, String text,
-                                 @Valid @RequestBody Comment comment) {
+    public Comment createComment(@PathVariable (value = "postId") Long postId, @RequestParam ("text") String text,@RequestParam("file") MultipartFile file,
+                                 @Valid @RequestBody Comment comment ) {
+        if(commentRepository.findById(postId).isPresent()){
+            try {
+                return fileStorageService.store(text,file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         return postRepository.findById(postId).map(post -> {
             comment.setPost(post);
-            return commentRepository.save(comment);
+
+            return comment;
         }).orElseThrow(() -> new ResourceNotFoundException("PostId " + postId + " not found"));
     }
 

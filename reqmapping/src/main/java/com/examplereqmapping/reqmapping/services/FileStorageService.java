@@ -17,7 +17,7 @@ public class FileStorageService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public Comment store(MultipartFile file, String text) throws IOException {
+    public Comment store(String text,MultipartFile file ) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         Comment comment = new Comment( text,fileName, file.getContentType(), file.getBytes());
 
